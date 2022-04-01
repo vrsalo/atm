@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Most accurate list of ATMs in Croatia, daily synced">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" href="images/atm128.png">
+
+    <title>Bankomati</title>
+
+
+    <!-- Meta Tags required for
+       Progressive Web App -->
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <meta name="theme-color" content="black">
+
+    <!-- Manifest File link -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Custom styles for this template-->
+    <link href="css/min.css" rel="stylesheet">
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+           * element that contains the map.
+
+         Enable small screen bottom ads
+        @media only screen and (max-width: 768px) {
+            .map {
+                height: 80% !important;
+            }
+        } */
+    </style>
+
+    <script type="text/javascript" src="data.js"></script>
+
+    <script>
+        window.addEventListener('load', () => {
+            registerSW();
+        });
+
+        // Register the Service Worker
+        async function registerSW() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    await navigator
+                        .serviceWorker
+                        .register('serviceworker.js');
+                } catch (e) {
+                    console.log('SW registration failed');
+                }
+            }
+        }
+    </script>
+
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion " id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <div class="sidebar-brand d-flex align-items-center justify-content-center">
+            <img src="/images/atm128.png" class="rotate-n-15 brand-icon">
+            <div class="sidebar-brand-text mx-3">Bankomati .info</div>
+        </div>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Top Providers
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.zaba.hr/home/">
+                <img class="ZABA">
+                <span>Zaba</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.pbz.hr/">
+                <img class="PBZ">
+                <span>PBZ</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.erstebank.hr/">
+                <img class="ERSTE">
+                <span>Erste</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.otpbanka.hr/">
+                <img class="OTP">
+                <span>OTP</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.rba.hr/">
+                <img class="RBA">
+                <span>Raiffeisen</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://www.hpb.hr/">
+                <img class="HPB">
+                <span>HPB</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-heading d-none d-lg-flex">
+            ADS
+        </div>
+
+        <!-- Sidebar Message -->
+        <div class="sidebar-card d-none d-lg-flex h-50">
+
+            <!-- reklama -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7819643459400507"
+                 data-ad-slot="6429547524" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Sidebar Message -->
+        <div class="sidebar-card d-none d-lg-flex h-50">
+
+            <!-- reklama -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7819643459400507"
+                 data-ad-slot="6429547524" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="sidebar-heading ">
+            <a href="https://www.flaticon.com/" title="icons">flaticons </a>
+            <a href="mailto:vrsalo@gmail.com">Mail_help </a>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid" style="height: 100%; padding:0px!important">
+
+                <div class="row">
+                    <div id="map" class="map col-12"></div>
+                    <div class="botBanner col-12 bg-gradient-dark d-none">
+                        <!-- d-md-none -->
+                        <!-- Sidebar Message -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Modal -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group">
+                        <label for="Bank" class="control-label">Bank:</label>
+                        <select id="Bank" class="form-control selectpicker" multiple title="Bank" data-size="10"
+                                data-width="100%">
+                            <option value="ZABA">Zagrebačka banka</option>
+                            <option value="PBZ">Privredna banka Zagreb</option>
+                            <option value="ERSTE">Erste Bank</option>
+                            <option value="OTP">OTP banka</option>
+                            <option value="RBA">RaiffeisenBANK</option>
+                            <option value="HPB">Hrvatska poštanska banka</option>
+                            <option hidden>Addiko Bank</option>
+                            <option hidden>Sberbank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="City" class="control-label">Location:</label>
+                        <select id="City" class="selectpicker" data-live-search="true" multiple title="City"
+                                data-size="5" data-width="100%" data-actions-box="true">
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="Go" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Button trigger modal -->
+<button aria-label="search locations" type="button" class="hideSidebar btn btn-primary btn-circle btn-lg"
+        data-toggle="modal" data-target="#myModal" style="position: absolute!important; top: 5px; right:5px;">
+    <span class="fas fa-search" aria-hidden="true"></span>
+</button>
+
+<!-- Button trigger modal -->
+<button aria-label="locate me" type="button" class="hideSidebar btn btn-light btn-circle" onclick="locateMe()"
+        style="position: absolute!important; top: 70px; right:10px;">
+    <span class="fas fa-street-view" aria-hidden="true"></span>
+</button>
+
+<button id="sidebarToggleTop" class="btn btn-light btn-circle d-md-none "
+        style="position: absolute!important; top: 120px; right:10px;">
+    <i class="fa fa-bars"></i>
+</button>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/js/bootstrap.min.js"
+        integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Latest compiled and minified CSS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"
+        integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+    var map;
+    var markers = [];
+    var city = new Set();
+    var infowindow, latLngBounds, sbImage, rbaImage, zabaImage, locationMarker;
+    var currentLocation;
+
+    if ($(window).width() > 768) {
+        $('.navbar-nav').removeClass('toggled');
+    } else {
+        $('.navbar-nav').addClass('toggled');
+    }
+
+
+    function initMap() {
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            disableDefaultUI: true,
+            styles: mapStyle
+        });
+
+        infowindow = new google.maps.InfoWindow();
+        latLngBounds = new google.maps.LatLngBounds();
+
+        locationMarker = new google.maps.Marker({
+            animation: google.maps.Animation.BOUNCE,
+            icon: {
+                url: "images/pin.png"
+            },
+            map: map,
+            zIndex: 100000,
+            clickable: false
+        });
+
+        for (var i = 0; i < bankomati.length; i++) {
+            addBankomat(bankomati[i]);
+        }
+
+
+        mjesta = Array.from(city).sort();
+
+        for (var i = 0; i < mjesta.length; i++) {
+            $('#City').append($('<option>', {
+                text: mjesta[i]
+            }));
+        }
+
+
+        map.fitBounds(latLngBounds)
+
+    }
+
+    // Sets the map on all markers in the array.
+    function locateMe() {
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                currentLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                map.setCenter(currentLocation);
+                map.setZoom(15);
+                locationMarker.setPosition(currentLocation);
+            }, function () {
+                alert("Please enable Location permission in order to show current postion");
+            });
+        } else {
+            // Browser doesn't support Geolocatio
+            alert("Browser doesn't support Geolocatio");
+        }
+    }
+
+    function addBankomat(bankomat) {
+        var marker = new google.maps.Marker({
+            position: {
+                lat: bankomat.lat,
+                lng: bankomat.lng
+            },
+            icon: {
+                url: window[bankomat.bank + "ImageUrl"]
+            },
+            map: map
+        });
+        latLngBounds.extend(marker.getPosition())//
+        marker.bank = bankomat.bank;
+        marker.city = bankomat.city;
+        markers.push(marker);
+
+        city.add(bankomat.city)
+
+        marker.addListener('click', function () {
+            console.log(bankomat.name)
+            infowindow.close();
+
+
+            var infowindowHTML = '<div class="row align-items-center "> <div class="col-xs-auto"><a tabindex="-1" class="btn btn-primary btn-lg btn-circle" href="xxx"><span class="fas fa-directions fa-lg" ></span></a></div><div class="col">yyy</div>  </div>'
+            infowindowHTML = infowindowHTML.replace("xxx", "https://maps.google.com/maps?daddr=" + bankomat.lat + "," + bankomat.lng + "zzz")
+            infowindowHTML = infowindowHTML.replace("zzz", currentLocation ? "&saddr=" + currentLocation.lat + "," + currentLocation.lng : "")
+            infowindowHTML = infowindowHTML.replace("yyy", (bankomat.name ? bankomat.name : "") + "<br>" + bankomat.full_aaddress + "<br>" + bankomat.city)
+            infowindow.setContent(infowindowHTML);
+            //infowindow.setContent(bankomat.full_aaddress + "<br>" + bankomat.city + "<br><a tabindex='-1' class='btn btn-primary btn-sm' href='https://maps.google.com/maps?saddr=" + currentLocation.lat + "," + currentLocation.lng + "&daddr=" + bankomat.lat + "," + bankomat.lng + "'>Directions</a>")
+            infowindow.open(map, marker);
+        });
+    }
+
+    // Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    // Removes the markers from the map, but keeps them in the array.
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    // Shows any markers currently in the array.
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    // Deletes all markers in the array by removing references to them.
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+    $("#Go").on("click", function (event) {
+        event.preventDefault();
+        filterMarkers()
+    });
+
+    $("#map, .hideSidebar").on("click", function (event) {
+        if ($(window).width() < 768) $('.navbar-nav').addClass('toggled');
+    });
+
+    // Deletes all markers in the array by removing references to them.
+    function filterMarkers() {
+        tempBounds = new google.maps.LatLngBounds();
+        clearMarkers();
+        for (var i = 0; i < markers.length; i++) {
+            if (($("#City").val().indexOf(markers[i].city) > -1 || $("#City").val().length === 0) && ($("#Bank").val().indexOf(markers[i].bank) > -1 || $("#Bank").val().length === 0)) {
+                tempBounds.extend(markers[i].getPosition())
+                markers[i].setMap(map);
+            }
+        }
+        if (tempBounds.isEmpty())
+            map.setCenter(currentLocation)
+        else
+            map.fitBounds(tempBounds)
+    }
+
+    !function (l) {
+        "use strict";
+        l("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
+            l("body").toggleClass("sidebar-toggled"),
+                l(".sidebar").toggleClass("toggled"),
+            l(".sidebar").hasClass("toggled") && l(".sidebar .collapse").collapse("hide")
+        }),
+            l(window).resize(function () {
+                l(window).width() < 768 && l(".sidebar .collapse").collapse("hide"),
+                l(window).width() < 480 && !l(".sidebar").hasClass("toggled") && (l("body").addClass("sidebar-toggled"),
+                    l(".sidebar").addClass("toggled"),
+                    l(".sidebar .collapse").collapse("hide"))
+            })
+    }(jQuery);
+
+
+    $(".RBA").attr('src', RBAImageUrl);
+    $(".PBZ").attr('src', PBZImageUrl);
+    $(".ERSTE").attr('src', ERSTEImageUrl);
+    $(".ZABA").attr('src', ZABAImageUrl);
+    $(".OTP").attr('src', OTPImageUrl);
+    $(".HPB").attr('src', HPBImageUrl);
+
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM91x1IdQNR5B-daGQd1xb55RjX0UE8Dg&callback=initMap&libraries=&v=weekly"></script>
+
+</body>
+
+</html>

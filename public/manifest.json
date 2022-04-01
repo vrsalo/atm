@@ -1,0 +1,22 @@
+{
+	"name": "Bankomati",
+	"short_name": "Bankomati",
+	"start_url": "index.html",
+	"display": "standalone",
+	"background_color": "black",
+	"theme_color": "black",
+	"scope": ".",
+	"description": "Most accurate list of ATMs in Croatia, daily synced",
+	"icons": [
+		{
+			"src": "images/atm128.png",
+			"sizes": "128x128",
+			"type": "image/png"
+		},
+		{
+			"src": "images/atm512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}
